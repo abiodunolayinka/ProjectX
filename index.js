@@ -71,6 +71,17 @@ app.post("/login", async (req, res) => {
     console.log(error);
   }
 });
+
+app.get("/userDetails/:id", async (req, res) => {
+  try {
+    const details = await userDetails.findById(req.params.id);
+
+    return res.status(200).json({ success: "User found", data:details})
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ success: "User not found" });
+  }
+});
 app.delete("/delete/:id", async (req, res) => {
   try {
     await userDetails.findByIdAndDelete(req.params.id);
@@ -80,6 +91,7 @@ app.delete("/delete/:id", async (req, res) => {
     return res.status(500).json({ success: "User deletion failed" });
   }
 });
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`); // Log that the server is running
 });
