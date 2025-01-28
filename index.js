@@ -58,6 +58,21 @@ app.put("/update/:id", async (req, res) => {
     return res.status(500).json({ sucess: false, message: error.message });
   }
 });
+app.put("/changePassword/:id", async(req, res) => {
+  const { password } = req.body;
+  try {
+    const UpdatePassword = await userDetails.findByIdAndUpdate(
+      req.params.id,
+      {password},
+      {new:true}
+    )
+    return res.status(200).json({success: true, message: "Password updated"})
+  }catch(error){
+    console.log(error);
+    return res.status(500).json({success: false, message: error.message})
+  }
+})
+
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -75,7 +90,7 @@ app.post("/login", async (req, res) => {
 app.get("/userDetails/:id", async (req, res) => {
   try {
     const details = await userDetails.findById(req.params.id);
-
+ 
     return res.status(200).json({ success: "User found", data:details})
   } catch (error) {
     console.log(error);
@@ -93,5 +108,5 @@ app.delete("/delete/:id", async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`); // Log that the server is running
+  console.log(`Server is running on port ${port}`);
 });
